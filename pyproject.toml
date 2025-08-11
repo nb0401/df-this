@@ -13,3 +13,8 @@ df_this = "df_this.cli:main"
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[project.urls]
+Homepage = "https://github.com/nb0401/df_this"
+Source = "https://github.com/nb0401/df_this"
+Issues = "https://github.com/nb0401/df_this/issues"
