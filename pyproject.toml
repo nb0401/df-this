@@ -1,6 +1,6 @@
 [project]
 name = "df-this"
-version = "0.1.0"
+version = "0.1.2"
 description = "A tool to inspect your incoming dataframes and excel files."
 authors = [{name = "nb0401"}]
 readme = { file = "README.md", content-type = "text/markdown" }
