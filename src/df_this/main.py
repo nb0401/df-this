@@ -1,12 +1,24 @@
 import pandas as pd
-from tqdm import tqdm
 import string
 
-def check_type(df: pd.DataFrame) -> pd.DataFrame:
+DANGEROUS_PREFIXES = ("=", "+", "-", "@")
+
+def check_type(df: pd.DataFrame) -> None:
     if not isinstance(df, pd.DataFrame):
         raise TypeError(f"Expected pandas.DataFrame, got {type(df).__name__}")
-    else:
-        return True
+
+def sanitize_for_excel(df: pd.DataFrame) -> pd.DataFrame:
+    safe = df.copy()
+    for col in safe.columns:
+        s = safe[col]
+        if pd.api.types.is_string_dtype(s) or s.dtype == object:
+            mask = s.notna()
+            s_str = s[mask].astype(str)
+            s_str = s_str.map(lambda v: "'" + v if v.startswith(DANGEROUS_PREFIXES) else v)
+            s = s.copy()
+            s.loc[mask] = s_str
+            safe[col] = s
+    return safe
 
 def df_desc(df: pd.DataFrame) -> pd.DataFrame:
     check_type(df)
@@ -25,7 +37,7 @@ def df_desc(df: pd.DataFrame) -> pd.DataFrame:
 
     results = []
 
-    for col in tqdm(df.columns, leave=False, disable=False):
+    for col in df.columns:
         chars = {
             "numeric": set(),
             "letters_lowercase": set(),
@@ -74,9 +86,12 @@ def df_stats(df: pd.DataFrame) -> pd.DataFrame:
 
     numeric_df = df.select_dtypes(include=["number"])
 
+    if numeric_df.shape[1] == 0:
+        return pd.DataFrame(columns=["column","min","max","mean","median","std_sample","std_pop"])
+
     summary = []
 
-    for col in tqdm(numeric_df.columns, leave=False, disable=False):
+    for col in numeric_df.columns:
         values = numeric_df[col].dropna()
         summary.append({
             "column":col,
@@ -84,7 +99,7 @@ def df_stats(df: pd.DataFrame) -> pd.DataFrame:
             "max":values.max(),
             "mean":values.mean(),
             "median":values.median(),
-            "std_smaple":values.std(ddof=1),
+            "std_sample":values.std(ddof=1),
             "std_pop": values.std(ddof=0)
         })
     
@@ -96,7 +111,7 @@ def df_nullique(df: pd.DataFrame) -> pd.DataFrame:
 
     result = []
 
-    for col in tqdm(df.columns, leave=False, disable=False):
+    for col in df.columns:
         series = df[col]
 
         cleaned = series.replace(r'^\s*$', '', regex=True)

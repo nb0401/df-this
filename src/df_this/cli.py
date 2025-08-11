@@ -1,6 +1,6 @@
 import argparse
 import pandas as pd
-from .main import df_desc, df_stats, df_nullique
+from .main import df_desc, df_stats, df_nullique, sanitize_for_excel
 from pathlib import Path
 
 # Function to normalize excel suffix
@@ -72,11 +72,13 @@ def main():
     
     if len(results) == 1:
         name, final_df = results[0]
-        final_df.to_excel(output_path, index=False)
+        out_df = sanitize_for_excel(final_df)
+        out_df.to_excel(output_path, index=False)
         print(f"df-this saved {name} - {input_path} to {output_path}")
     else:
         with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
             df.to_excel(writer, index=False, sheet_name="Old_df")
             for name, final_df in results:
-                final_df.to_excel(writer, index=False, sheet_name=name[:31])
+                out_df = sanitize_for_excel(final_df)
+                out_df.to_excel(writer, index=False, sheet_name=name[:31])
         print(f"df-this saved all - {input_path} to {output_path}")

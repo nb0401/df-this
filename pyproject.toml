@@ -1,6 +1,6 @@
 [project]
 name = "df-this"
-version = "0.1.2"
+version = "0.1.11"
 description = "A tool to inspect your incoming dataframes and excel files."
 authors = [{name = "nb0401"}]
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -15,6 +15,6 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project.urls]
-Homepage = "https://github.com/nb0401/df_this"
-Source = "https://github.com/nb0401/df_this"
-Issues = "https://github.com/nb0401/df_this/issues"
+Homepage = "https://github.com/nb0401/df-this"
+Source = "https://github.com/nb0401/df-this"
+Issues = "https://github.com/nb0401/df-this/issues"
