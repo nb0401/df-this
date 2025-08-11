@@ -1,5 +1,5 @@
 [project]
-name = "df_this"
+name = "df-this"
 version = "0.1.0"
 description = "A tool to inspect your incoming dataframes and excel files."
 authors = [{name = "nb0401"}]
@@ -8,7 +8,7 @@ requires-python = ">=3.8"
 dependencies = ["pandas", "openpyxl", "tqdm"]
 
 [project.scripts]
-df_this = "df_this.cli:main"
+df-this = "df_this.cli:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]

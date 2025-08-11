@@ -20,21 +20,21 @@ def _check_flags(p: argparse.ArgumentParser):
     return flags
 
 def main():
-    parser = argparse.ArgumentParser(description="Run df_this on an Excel file.")
+    parser = argparse.ArgumentParser(description="Run df-this on an Excel file.")
     parser.add_argument("input_file", type=str, help="Path to the input Excel file")
-    parser.add_argument("output_file", nargs="?", type=str, help="Path to save the output Excel file (defaults to <input_path>_df_this.xlsx)", default=None)
+    parser.add_argument("output_file", nargs="?", type=str, help="Path to save the output Excel file (defaults to <input_path>_df-this.xlsx)", default=None)
 
     # Activate the df_desc function with --desc
-    parser.add_argument("--desc",action="store_true",help="Run 'df_this <input> <output> --desc' to find out the content of each column.")
+    parser.add_argument("--desc",action="store_true",help="Run 'df-this <input> <output> --desc' to find out the content of each column.")
 
     # Activate the df_stats function with --stat
-    parser.add_argument("--stat",action="store_true",help="Run 'df_this <input> <output> --stat' to see basic statistics for each column.")
+    parser.add_argument("--stat",action="store_true",help="Run 'df-this <input> <output> --stat' to see basic statistics for each column.")
 
     # Activate the df_nullique function with --null
-    parser.add_argument("--null",action="store_true",help="Run 'df_this <input> <output> --null' to see if the column is distinct, get the distinct count, and see if there are null values.")
+    parser.add_argument("--null",action="store_true",help="Run 'df-this <input> <output> --null' to see if the column is distinct, get the distinct count, and see if there are null values.")
 
     # Activate all functions as added sheets with the original table with --all
-    parser.add_argument("--all",action="store_true",help="Run 'df_this <input> <output> --all' to get all functions as additional sheets in a copy of the original file.")
+    parser.add_argument("--all",action="store_true",help="Run 'df-this <input> <output> --all' to get all functions as additional sheets in a copy of the original file.")
 
     args = parser.parse_args()
 
@@ -48,7 +48,7 @@ def main():
     if not input_path.exists():
         raise FileNotFoundError(f"OI! Where's my input file?! {input_path}")
     
-    output_path = Path(args.output_file) if args.output_file else input_path.parent / f"{input_path.stem}_df_this.xlsx"
+    output_path = Path(args.output_file) if args.output_file else input_path.parent / f"{input_path.stem}_df-this.xlsx"
     output_path = _xlsx_this(Path(output_path))
 
     df = pd.read_excel(input_path, engine="openpyxl")
@@ -73,10 +73,10 @@ def main():
     if len(results) == 1:
         name, final_df = results[0]
         final_df.to_excel(output_path, index=False)
-        print(f"df_this saved {name} - {input_path} to {output_path}")
+        print(f"df-this saved {name} - {input_path} to {output_path}")
     else:
         with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
             df.to_excel(writer, index=False, sheet_name="Old_df")
             for name, final_df in results:
                 final_df.to_excel(writer, index=False, sheet_name=name[:31])
-        print(f"df_this saved all - {input_path} to {output_path}")
+        print(f"df-this saved all - {input_path} to {output_path}")
