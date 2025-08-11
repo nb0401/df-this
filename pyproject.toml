@@ -1,0 +1,15 @@
+[project]
+name = "df_this"
+version = "0.1.0"
+description = "A tool to inspect your incoming dataframes and excel files."
+authors = [{name = "nb0401"}]
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.8"
+dependencies = ["pandas", "openpyxl", "tqdm"]
+
+[project.scripts]
+df_this = "df_this.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
